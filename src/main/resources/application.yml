@@ -1,0 +1,25 @@
+server:
+  port: 7777
+  servlet:
+    context-path: /iot
+spring:
+  application:
+    name: iot
+  datasource:
+    url: jdbc:mysql://49.233.131.191:3306/test?characterEncoding=utf-8&connectTimeout=1000&socketTimeout=3000&autoReconnect=true
+    username: root
+    password: ChTYg3TJTYKQYk41
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    database: mysql
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+#MQTT server
+mqtt:
+  host: tcp://172.15.0.2:1883
+  #mqtt.host=tcp://172.16.4.171:1883
+  username: heyong
+  password: 666666
+  clientId: mqtt|client|v3|demo-10
+  cleanStart: true
