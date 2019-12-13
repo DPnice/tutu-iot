@@ -31,6 +31,7 @@ public class MqttConfig {
     private boolean cleanStart;
 
     private MqttClient client;
+
     private MqttConnectOptions options;
     private static Logger logger = LoggerFactory.getLogger(MqttConfig.class);
 
@@ -39,7 +40,7 @@ public class MqttConfig {
      *
      */
     @Bean
-    public MqttClient getClient() throws Exception {
+    public MqttClient mqttClient() throws Exception {
         client = new MqttClient(serviceHost, clientId, new MemoryPersistence());
 
         // MQTT的连接设置
@@ -48,7 +49,6 @@ public class MqttConfig {
         options.setCleanSession(false);
         // 设置断开后自动重连
         options.setAutomaticReconnect(true);
-        /*
         // 设置连接的用户名
         options.setUserName(userName);
         // 设置连接的密码
@@ -56,19 +56,15 @@ public class MqttConfig {
         // 设置超时时间 单位为秒
         options.setConnectionTimeout(10);
         // 设置会话心跳时间 单位为秒 服务器会每隔1.5*20秒的时间向客户端发送个消息判断客户端是否在线，但这个方法并没有重连的机制
-        options.setKeepAliveInterval(20);
-        */
+        //options.setKeepAliveInterval(20);
 
         //setWill方法，如果项目中需要知道客户端是否掉线可以调用该方法。设置最终端口的通知消息
-        options.setWill("demo/will-message", "close".getBytes(), 2, true);
+        options.setWill("client/will-message", "close".getBytes(), 2, true);
         // 设置回调
         client.setCallback(new Callback());
         //连接到服务器
         client.connect(options);
 
-        boolean isConnected = client.isConnected();
-
-        logger.info(isConnected ? String.format("成功连接到 %s", serviceHost) : "连接失败...");
         return client;
     }
 }
