@@ -30,21 +30,16 @@ public class MqttConfig {
     @Value("${mqtt.cleanStart}")
     private boolean cleanStart;
 
-    private MqttClient client;
-
-    private MqttConnectOptions options;
     private static Logger logger = LoggerFactory.getLogger(MqttConfig.class);
 
     /**
-     * 获取一个MQTT客户端连接
-     *
+     * 获取一个MQTT客户端连接 
      */
     @Bean
     public MqttClient mqttClient() throws Exception {
-        client = new MqttClient(serviceHost, clientId, new MemoryPersistence());
-
+        MqttClient client = new MqttClient(serviceHost, clientId, new MemoryPersistence());
         // MQTT的连接设置
-        options = new MqttConnectOptions();
+        MqttConnectOptions options = new MqttConnectOptions();
         // 设置是否清空session,这里如果设置为false表示服务器会保留客户端的连接记录，这里设置为true表示每次连接到服务器都以新的身份连接
         options.setCleanSession(false);
         // 设置断开后自动重连
@@ -61,10 +56,11 @@ public class MqttConfig {
         //setWill方法，如果项目中需要知道客户端是否掉线可以调用该方法。设置最终端口的通知消息
         options.setWill("client/will-message", "close".getBytes(), 2, true);
         // 设置回调
-        client.setCallback(new Callback());
+//        client.setCallback(new Callback());
         //连接到服务器
         client.connect(options);
-
         return client;
     }
+
+
 }

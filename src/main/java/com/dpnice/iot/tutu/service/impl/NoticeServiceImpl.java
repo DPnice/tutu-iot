@@ -3,7 +3,6 @@ package com.dpnice.iot.tutu.service.impl;
 import com.dpnice.iot.tutu.model.Notice;
 import com.dpnice.iot.tutu.repository.NoticeRepository;
 import com.dpnice.iot.tutu.service.NoticeService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;

@@ -10,26 +10,25 @@ import java.util.Date;
 
 /**
  * @author DPnice
- * @date 2019-12-13 下午 4:50
+ * @date 2019-12-15 上午 12:05
  */
 @Entity
 @Getter
 @Setter
 @RequiredArgsConstructor
 @NoArgsConstructor
-public class TemperatureSequential {
+public class WaterQuantitySequential {
 
     @Id
     @NonNull
     @Column(nullable = false, length = 30)
-    private String temperatureId;
+    private String waterId;
 
     @NonNull
     @Column(nullable = false, length = 3)
-    private double temperature;
+    private double waterQuantity;
 
     @NonNull
     @Column(nullable = false, length = 20)
-    private Date temperatureTime;
-
+    private Date waterQuantityTime;
 }

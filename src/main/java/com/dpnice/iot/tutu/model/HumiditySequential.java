@@ -21,7 +21,6 @@ public class HumiditySequential {
 
     @Id
     @NonNull
-    @GeneratedValue
     @Column(nullable = false, length = 30)
     private String humidityId;
 

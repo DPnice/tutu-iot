@@ -1,0 +1,38 @@
+{
+  "properties": [
+    {
+      "name": "mqtt.host",
+      "type": "java.lang.String",
+      "description": "Description for mqtt.host."
+    },
+    {
+      "name": "mqtt.username",
+      "type": "java.lang.String",
+      "description": "Description for mqtt.username."
+    },
+    {
+      "name": "mqtt.password",
+      "type": "java.lang.String",
+      "description": "Description for mqtt.password."
+    },
+    {
+      "name": "mqtt.clientId",
+      "type": "java.lang.String",
+      "description": "Description for mqtt.clientId."
+    },
+    {
+      "name": "mqtt.cleanStart",
+      "type": "java.lang.String",
+      "description": "Description for mqtt.cleanStart."
+    },
+    {
+      "name": "mqtt.topic",
+      "type": "java.lang.String",
+      "description": "Description for mqtt.topic."
+    },
+    {
+      "name": "mqtt.qos",
+      "type": "java.lang.String",
+      "description": "Description for mqtt.qos."
+    }
+  ] }

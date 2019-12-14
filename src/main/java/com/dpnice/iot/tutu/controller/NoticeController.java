@@ -25,7 +25,6 @@ public class NoticeController {
     @ResponseBody
     @RequestMapping(value = "msg", method = RequestMethod.GET)
     public RestResult getAllGroup() {
-
         return new RestResult<>(HttpStatus.OK.value(), noticeService.getNotice().getContent());
     }
 

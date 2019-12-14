@@ -1,9 +1,6 @@
 package com.dpnice.iot.tutu.service;
 
-import org.eclipse.paho.client.mqttv3.MqttClient;
-import org.eclipse.paho.client.mqttv3.MqttDeliveryToken;
-import org.eclipse.paho.client.mqttv3.MqttMessage;
-import org.eclipse.paho.client.mqttv3.MqttTopic;
+import org.eclipse.paho.client.mqttv3.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -20,6 +17,15 @@ public class MqttServer {
 
     public MqttServer(MqttClient mqttClient) {
         this.mqttClient = mqttClient;
+    }
+
+    /**
+     * 设置回调
+     *
+     * @param callback MqttCallbackExtended
+     */
+    public void setCallback(MqttCallbackExtended callback) {
+        this.mqttClient.setCallback(callback);
     }
 
     /**
@@ -43,6 +49,14 @@ public class MqttServer {
     public void subscribe(String[] topics, int[] qos) throws Exception {
         mqttClient.subscribe(topics, qos);
         logger.info("订阅主题: {} 成功！", String.join(",", topics));
+    }
+
+    /**
+     * 订阅消息
+     */
+    public void subscribe(String topic, int qos) throws Exception {
+        mqttClient.subscribe(topic, qos);
+        logger.info("订阅主题: {} 成功！", String.join(",", topic));
     }
 
     /**

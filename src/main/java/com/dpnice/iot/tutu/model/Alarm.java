@@ -4,32 +4,31 @@ import lombok.*;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import java.util.Date;
 
 /**
  * @author DPnice
- * @date 2019-12-13 下午 4:50
+ * @date 2019-12-15 上午 2:32
  */
 @Entity
 @Getter
 @Setter
 @RequiredArgsConstructor
 @NoArgsConstructor
-public class TemperatureSequential {
+public class Alarm {
 
     @Id
     @NonNull
     @Column(nullable = false, length = 30)
-    private String temperatureId;
+    private String alarmId;
 
     @NonNull
-    @Column(nullable = false, length = 3)
-    private double temperature;
+    @Column(nullable = false, length = 30)
+    private double alarm;
 
     @NonNull
     @Column(nullable = false, length = 20)
-    private Date temperatureTime;
+    private Date alarmTime;
 
 }
