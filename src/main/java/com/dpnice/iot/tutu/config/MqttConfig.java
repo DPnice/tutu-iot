@@ -33,7 +33,7 @@ public class MqttConfig {
     private static Logger logger = LoggerFactory.getLogger(MqttConfig.class);
 
     /**
-     * 获取一个MQTT客户端连接 
+     * 获取一个MQTT客户端连接
      */
     @Bean
     public MqttClient mqttClient() throws Exception {
@@ -51,7 +51,7 @@ public class MqttConfig {
         // 设置超时时间 单位为秒
         options.setConnectionTimeout(10);
         // 设置会话心跳时间 单位为秒 服务器会每隔1.5*20秒的时间向客户端发送个消息判断客户端是否在线，但这个方法并没有重连的机制
-        //options.setKeepAliveInterval(20);
+        options.setKeepAliveInterval(20);
 
         //setWill方法，如果项目中需要知道客户端是否掉线可以调用该方法。设置最终端口的通知消息
         options.setWill("client/will-message", "close".getBytes(), 2, true);
@@ -59,6 +59,7 @@ public class MqttConfig {
 //        client.setCallback(new Callback());
         //连接到服务器
         client.connect(options);
+
         return client;
     }
 

@@ -1,5 +1,9 @@
 package com.dpnice.iot.tutu.handle;
 
+import com.dpnice.iot.tutu.handle.alarm.AlarmContext;
+import com.dpnice.iot.tutu.handle.alarm.AlarmType;
+import com.dpnice.iot.tutu.handle.alarm.CompareResult;
+import com.dpnice.iot.tutu.model.Alarm;
 import com.dpnice.iot.tutu.model.HumiditySequential;
 import com.dpnice.iot.tutu.model.TemperatureSequential;
 import com.dpnice.iot.tutu.model.WaterQuantitySequential;
@@ -12,6 +16,7 @@ import org.eclipse.paho.client.mqttv3.MqttCallbackExtended;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -29,6 +34,17 @@ import java.util.UUID;
 public class THWHandle implements MqttCallbackExtended {
     private static Logger logger = LoggerFactory.getLogger(THWHandle.class);
 
+    @Value("${alarm.humidity}")
+    private String humidity;
+
+    @Value("${alarm.temperature}")
+    private String temperature;
+
+    @Value("${alarm.water}")
+    private String water;
+
+    private final AlarmContext alarmContext;
+
     @Resource
     private final HumiditySequentialRepository humiditySequentialRepository;
 
@@ -41,7 +57,11 @@ public class THWHandle implements MqttCallbackExtended {
     @Resource
     private final AlarmRepository alarmRepository;
 
-    public THWHandle(HumiditySequentialRepository humiditySequentialRepository, TemperatureSequentialRepository temperatureSequentialRepository, WaterQuantitySequentialRepository waterQuantitySequentialRepository, AlarmRepository alarmRepository) {
+    public THWHandle(AlarmContext alarmContext, HumiditySequentialRepository humiditySequentialRepository,
+                     TemperatureSequentialRepository temperatureSequentialRepository,
+                     WaterQuantitySequentialRepository waterQuantitySequentialRepository,
+                     AlarmRepository alarmRepository) {
+        this.alarmContext = alarmContext;
         this.humiditySequentialRepository = humiditySequentialRepository;
         this.temperatureSequentialRepository = temperatureSequentialRepository;
         this.waterQuantitySequentialRepository = waterQuantitySequentialRepository;
@@ -56,8 +76,8 @@ public class THWHandle implements MqttCallbackExtended {
      */
     @Override
     public void connectComplete(boolean reconnect, String serverURI) {
-        logger.info("是否是重新连接:{}", reconnect);
-        logger.info("serverURI:{}", serverURI);
+        logger.debug("是否是重新连接:{}", reconnect);
+        logger.debug("serverURI:{}", serverURI);
     }
 
     /**
@@ -98,34 +118,62 @@ public class THWHandle implements MqttCallbackExtended {
      *
      * @param topic   name of the topic on the message was published to
      * @param message the actual message.
-     * @throws Exception if a terminal error has occurred, and the client should be
-     *                   shut down.
      */
     @Override
-    public void messageArrived(String topic, MqttMessage message) throws Exception {
+    public void messageArrived(String topic, MqttMessage message) {
         //subscribe后得到的消息会执行到这里面
         logger.debug("接收消息主题:{}", topic);
         logger.debug("接收消息Qos:{}", message.getQos());
         String msg = new String(message.getPayload());
         logger.debug("接收消息内容:{}", msg);
-        //todo 处理
-
-        String[] split = msg.split(",");
-        String t = split[0];
-        String h = split[1];
-        String w = split[2];
-
-
-
-        String uuid = UUID.randomUUID().toString().trim().replaceAll("-", "");
-        uuid = uuid.substring(uuid.length() - 8);
-
         Date systemTime = getSystemTime();
-        TemperatureSequential temperature = new TemperatureSequential(uuid, Double.parseDouble(t), systemTime);
+        String[] split = msg.split(",");
+        double t = Double.parseDouble(split[0]);
+        double h = Double.parseDouble(split[1]);
+        double w = Double.parseDouble(split[2]);
+
+        CompareResult alarmT = alarmContext.isAlarm(AlarmType.T, temperature, t);
+        if (alarmT.isAlarm()) {
+            Alarm alarm = new Alarm();
+            alarm.setAlarm(alarmT.toString() + ",当前温度:" + t);
+            alarm.setType(AlarmType.T.value());
+            alarm.setAlarmId(getUUID());
+            alarm.setAlarmTime(systemTime);
+            alarmRepository.save(alarm);
+            logger.debug("温度告警:{}", alarmT + ",当前温度:" + t);
+        }
+        try {
+
+            CompareResult alarmH = alarmContext.isAlarm(AlarmType.H, humidity, h);
+            if (alarmH.isAlarm()) {
+                Alarm alarm = new Alarm();
+                alarm.setAlarm(alarmH.toString() + ",当前湿度:" + h);
+                alarm.setType(AlarmType.H.value());
+                alarm.setAlarmId(getUUID());
+                alarm.setAlarmTime(systemTime);
+                alarmRepository.save(alarm);
+                logger.debug("湿度告警:{}", alarmH + ",当前湿度:" + h);
+            }
+
+            if (w < Double.parseDouble(water)) {
+                Alarm alarm = new Alarm();
+                alarm.setAlarm("水量低于 " + water + " ml");
+                alarm.setType(AlarmType.W.value());
+                alarm.setAlarmId(getUUID());
+                alarm.setAlarmTime(systemTime);
+                alarmRepository.save(alarm);
+                logger.debug("水量告警:{}", "水量低于 " + water + " ml,当前水量:" + w + "ml");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        String uuid = getUUID();
+        TemperatureSequential temperature = new TemperatureSequential(uuid, t, systemTime);
         temperatureSequentialRepository.save(temperature);
-        HumiditySequential humidity = new HumiditySequential(uuid, Double.parseDouble(h), systemTime);
+        HumiditySequential humidity = new HumiditySequential(uuid, h, systemTime);
         humiditySequentialRepository.save(humidity);
-        WaterQuantitySequential water = new WaterQuantitySequential(uuid, Double.parseDouble(w), systemTime);
+        WaterQuantitySequential water = new WaterQuantitySequential(uuid, w, systemTime);
         waterQuantitySequentialRepository.save(water);
 
     }
@@ -141,6 +189,12 @@ public class THWHandle implements MqttCallbackExtended {
         return null;
     }
 
+    private static String getUUID() {
+        String uuid = UUID.randomUUID().toString().trim().replaceAll("-", "");
+        uuid = uuid.substring(uuid.length() - 8);
+        return uuid;
+    }
+
 
     /**
      * Called when delivery for a message has been completed, and all
@@ -154,6 +208,6 @@ public class THWHandle implements MqttCallbackExtended {
      */
     @Override
     public void deliveryComplete(IMqttDeliveryToken token) {
-        logger.info("消息发送成功:{}", token.isComplete());
+        logger.debug("消息发送成功:{}", token.isComplete());
     }
 }

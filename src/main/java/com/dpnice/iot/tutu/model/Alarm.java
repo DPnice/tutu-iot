@@ -1,5 +1,6 @@
 package com.dpnice.iot.tutu.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 
 import javax.persistence.Column;
@@ -25,9 +26,14 @@ public class Alarm {
 
     @NonNull
     @Column(nullable = false, length = 30)
-    private double alarm;
+    private String alarm;
 
     @NonNull
+    @Column(nullable = false, length = 8)
+    private String type;
+
+    @NonNull
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @Column(nullable = false, length = 20)
     private Date alarmTime;
 

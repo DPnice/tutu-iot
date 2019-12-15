@@ -17,4 +17,33 @@ public class SectionNN implements SectionComparison, InitializingBean {
     public void afterPropertiesSet() throws Exception {
         SectionFactory.register(type, this);
     }
+
+    /**
+     * 判断是否告警
+     *
+     * @return CompareResult
+     */
+    @Override
+    public CompareResult alarmCompare(AlarmType alarmType,double left, double right, double value) {
+
+        CompareResult compareResult = new CompareResult();
+        compareResult.setAlarmType(alarmType);
+        boolean notAlarm = (value > left && value < right);
+        if (notAlarm) {
+            //不告警
+            compareResult.setAlarm(false);
+            return compareResult;
+        } else {
+            compareResult.setAlarm(true);
+            //告警
+            if (value <= left) {
+                compareResult.setLeftOrRight(false);
+                compareResult.setValue(left);
+            }else {
+                compareResult.setLeftOrRight(true);
+                compareResult.setValue(right);
+            }
+        }
+        return compareResult;
+    }
 }
