@@ -34,5 +34,45 @@
       "name": "mqtt.qos",
       "type": "java.lang.String",
       "description": "Description for mqtt.qos."
+    },
+    {
+      "name": "jwt.header",
+      "type": "java.lang.String",
+      "description": "Description for jwt.header."
+    },
+    {
+      "name": "jwt.base64-secret",
+      "type": "java.lang.String",
+      "description": "Description for jwt.base64-secret."
+    },
+    {
+      "name": "jwt.token-validity-in-seconds",
+      "type": "java.lang.String",
+      "description": "Description for jwt.token-validity-in-seconds."
+    },
+    {
+      "name": "jwt.token-validity-in-seconds-for-remember-me",
+      "type": "java.lang.String",
+      "description": "Description for jwt.token-validity-in-seconds-for-remember-me."
+    },
+    {
+      "name": "alarm.humidity",
+      "type": "java.lang.String",
+      "description": "Description for alarm.humidity."
+    },
+    {
+      "name": "alarm.temperature",
+      "type": "java.lang.String",
+      "description": "Description for alarm.temperature."
+    },
+    {
+      "name": "alarm.water",
+      "type": "java.lang.String",
+      "description": "Description for alarm.water."
+    },
+    {
+      "name": "iot.security.ignore.urls",
+      "type": "java.lang.String",
+      "description": "Description for iot.security.ignore.urls."
     }
   ] }

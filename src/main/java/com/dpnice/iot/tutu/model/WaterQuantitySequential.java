@@ -1,5 +1,6 @@
 package com.dpnice.iot.tutu.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 
 import javax.persistence.Column;
@@ -30,5 +31,6 @@ public class WaterQuantitySequential {
 
     @NonNull
     @Column(nullable = false, length = 20)
+    @JsonFormat(pattern = "HH:mm:ss", timezone = "GMT+8")
     private Date waterQuantityTime;
 }

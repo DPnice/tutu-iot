@@ -1,10 +1,10 @@
 package com.dpnice.iot.tutu.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import java.util.Date;
 
@@ -30,6 +30,7 @@ public class TemperatureSequential {
 
     @NonNull
     @Column(nullable = false, length = 20)
+    @JsonFormat(pattern = "HH:mm:ss", timezone = "GMT+8")
     private Date temperatureTime;
 
 }

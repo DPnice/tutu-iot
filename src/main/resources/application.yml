@@ -22,7 +22,7 @@ mqtt:
   host: tcp://www.dpnice.online:1883
   username: test
   password: test
-  clientId: mqtt|client|v3|spring
+  clientId: mqtt|client|spring000
   cleanStart: false
   topic: esp32-test/t&h&w
   qos: 0
@@ -38,3 +38,15 @@ logging:
   level:
     root: info
     com.dpnice.iot.tutu.handle.THWHandle: debug
+
+jwt:
+  header: Authorization
+  base64-secret: ZmQ0ZGI5NjQ0MDQFjZDc0NGMxZWU2MmDPQ3nmDPQ3niZmQ0ZGI5NjQ0MDQFjZDc0NGMxZWU2MmDPQ3niceM1NzJmNTE0MzITE0MzI
+  # 60s
+  token-validity-in-seconds: 60
+  # valid 30 hours
+  token-validity-in-seconds-for-remember-me: 108000
+iot:
+  security:
+    ignore:
+      urls: /alarm/**,/humidity/**,/notice/**,/temperature/**,/water/**,/authenticate/**
