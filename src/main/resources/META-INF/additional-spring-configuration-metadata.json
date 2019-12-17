@@ -74,5 +74,10 @@
       "name": "iot.security.ignore.urls",
       "type": "java.lang.String",
       "description": "Description for iot.security.ignore.urls."
+    },
+    {
+      "name": "mqtt.feedTopic",
+      "type": "java.lang.String",
+      "description": "喂食的主题."
     }
   ] }

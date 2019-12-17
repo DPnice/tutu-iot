@@ -44,7 +44,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final JwtAuthenticationEntryPoint authenticationErrorHandler;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
     private CustomUserDetailsServiceImpl userDetailsService;
-    public static final String SECURITY_IGNORE_URLS_SPILT_CHAR = ",";
+    private static final String SECURITY_IGNORE_URLS_SPILT_CHAR = ",";
 
     @Bean
     public PasswordEncoder passwordEncoder() {

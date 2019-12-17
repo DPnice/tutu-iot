@@ -40,7 +40,7 @@ public class MqttServer {
         mqttTopic = mqttClient.getTopic(topic);
         MqttDeliveryToken token = mqttTopic.publish(mqttMessage);
         token.waitForCompletion();
-        logger.info("消息发布完成 {}", token.isComplete());
+        logger.info("消息发布完成 {} msg :{}", token.isComplete(), message);
     }
 
     /**
