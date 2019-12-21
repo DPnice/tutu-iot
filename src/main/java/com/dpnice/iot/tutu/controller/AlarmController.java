@@ -35,7 +35,7 @@ public class AlarmController {
     @ResponseBody
     @RequestMapping(value = "list", method = RequestMethod.GET)
     public RestResult<List<Alarm>> getAllGroup() {
-        PageRequest pageRequest = PageRequest.of(0, 10,Sort.by(DESC,"alarmTime"));
+        PageRequest pageRequest = PageRequest.of(0, 10, Sort.by(DESC, "alarmTime"));
         Page<Alarm> all = alarmRepository.findAll(pageRequest);
         return new RestResult<>(HttpStatus.OK.value(), all.getContent());
     }

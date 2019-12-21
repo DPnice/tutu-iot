@@ -2,9 +2,7 @@ package com.dpnice.iot.tutu.controller;
 
 import com.dpnice.iot.tutu.model.TwoTuple;
 import com.dpnice.iot.tutu.model.result.RestResult;
-import com.dpnice.iot.tutu.repository.FeedRecordRepository;
 import com.dpnice.iot.tutu.service.FeedService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
